@@ -54,10 +54,16 @@ class NotificationService {
       '${settings.authorizationStatus}',
     );
 
-    final token = await _messaging.getToken();
-
-    if (token != null) {
-      debugPrint('FCM TOKEN => $token');
+    String? token;
+    try {
+      token = await _messaging.getToken();
+      if (token != null) {
+        debugPrint('FCM TOKEN => $token');
+      }
+    } catch (e) {
+      debugPrint(
+        'Gagal mendapatkan FCM Token (Mungkin berjalan di iOS Simulator tanpa APNS): $e',
+      );
     }
 
     _messaging.onTokenRefresh.listen((newToken) {
